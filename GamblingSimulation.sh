@@ -9,7 +9,7 @@ BET_PER_GAME=1
 WIN=1
 MIN_WIN=$(( STAKE_PER_DAY * 50 / 100 ))
 MAX_WIN=$(( STAKE_PER_DAY + MIN_WIN ))
-TOTAL_DAYS=20
+TOTAL_DAYS=30
 
 #FUNCTION FOR CALCULATING STAKE PER DAY
 function calculateDailyStake()
@@ -27,19 +27,23 @@ function calculateDailyStake()
 			stake=$(( stake - BET_PER_GAME))
 		fi
 	done
-	stake=$(( stake - STAKE_PER_DAY ))
-	echo $stake
+	dailyStake=$(( stake - STAKE_PER_DAY ))
+	echo $dailyStake
 }
 
-#CALCULATING STAKE FOR 20 DAYS
+#CALCULATING STAKE FOR A MONTH
 for(( days=1; days<=$TOTAL_DAYS; days++ ))
 do
 	totalStake=$(( totalStake + $(calculateDailyStake) ))
+
+	if [ $totalStake -ge 0 ]
+	then
+		((winDays++))
+	else
+		((lostDays++))
+	fi
 done
 
-if [ $totalStake -ge 0 ]
-then
-	totalStakeWon=$totalStake
-else 
-	totalStakeLost=$((-1*$totalStake))
-fi
+#CALCULATING TOTAL AMOUNT OF WIN DAYS AND LOST DAYS IN MONTH
+totalwinDaysAmount=$(( winDays * MIN_WIN ))
+totallostDaysAmount=$(( lostDays * MIN_WIN ))
