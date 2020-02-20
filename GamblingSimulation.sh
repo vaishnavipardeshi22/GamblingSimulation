@@ -11,8 +11,6 @@ MIN_WIN=$(( STAKE_PER_DAY * 50 / 100 ))
 MAX_WIN=$(( STAKE_PER_DAY + MIN_WIN ))
 TOTAL_DAYS=30
 
-#DECLARE DICTIONARY
-
 #FUNCTION FOR CALCULATING STAKE PER DAY
 function calculateDailyStake()
 {
@@ -36,6 +34,9 @@ function calculateDailyStake()
 #CALCULATING STAKE FOR A MONTH
 function getMonthlyStakeArray()
 {
+	winDays=0
+	lostDays=0
+
 	for(( days=1; days<=$TOTAL_DAYS; days++ ))
 	do
 		totalDailyStake=$(calculateDailyStake)
@@ -45,7 +46,7 @@ function getMonthlyStakeArray()
 		else
 			((lostDays++))
 		fi
-		totalStake=$(( $totalStake + totalDailyStake ))
+		totalStake=$(( totalStake + totalDailyStake ))
 		dailyStakeArray[$days]=$totalStake
 	done
 	echo ${dailyStakeArray[@]}
@@ -90,3 +91,7 @@ function getUnluckiestDay()
 getMonthlyStakeArray
 LuckiestDay=$(getLuckiestDay)
 UnluckiestDay=$(getUnluckiestDay)
+totalWonAmount=$(( winDays * MIN_WIN ))
+totalLostAmount=$(( lostDays * MIN_WIN ))
+
+
