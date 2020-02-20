@@ -94,4 +94,12 @@ UnluckiestDay=$(getUnluckiestDay)
 totalWonAmount=$(( winDays * MIN_WIN ))
 totalLostAmount=$(( lostDays * MIN_WIN ))
 
-
+#IF GAMBLER WON THEN CONTINUE IN NEXT MONTH
+while [ $totalStake -gt 0 ]
+do
+	getMonthlyStakeArray
+	LuckiestDay=$(getLuckiestDay)
+	UnluckiestDay=$(getUnluckiestDay)
+	totalWonAmount=$(( winDays * MIN_WIN ))
+	totalLostAmount=$(( lostDays * MIN_WIN ))
+done
